@@ -22,8 +22,8 @@
     background-color: white;
     border: 2px solid #fc2003;
     border-radius: 10px;
-    top: 20px;
     transition: all 0.2s ease;
+    vertical-align: middle;
 }
 
 .remove-button:hover {

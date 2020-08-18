@@ -64,7 +64,7 @@ function readForms() {
 function makeForm(index, fName = "", lName = "", email = "") {
     var formString = "<div class=\"form-block\">\n"
         + "<span class=\"form-element\">\n"
-        + "<h3><button class=\"remove-button\" onclick=\"removeForm(" + index + ")\">-</button></span></h3>\n"
+        + "<h3><button class=\"remove-button\" onclick=\"removeForm(" + index + ")\">-</button></h3></span>\n"
         + "<span class=\"form-element\">\n"
         + "<form id=\"" + formID + index + "\">\n"
         + "First name: <input type=\"text\" id=\"" + fNameID + "\" value=\"" + fName + "\"><br>\n"
