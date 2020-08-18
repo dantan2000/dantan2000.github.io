@@ -66,7 +66,7 @@ function makeForm(index, fName = "", lName = "", email = "") {
         + "<span class=\"form-element\">\n"
         + "<br><h3><button class=\"remove-button\" onclick=\"removeForm(" + index + ")\">-</button></h3></span>\n"
         + "<span class=\"form-element\">\n"
-        + "<form id=\"" + formID + index + "\">\n"
+        + "<form class=\"form-text\" id=\"" + formID + index + "\">\n"
         + "First name: <input type=\"text\" id=\"" + fNameID + "\" value=\"" + fName + "\"><br>\n"
         + "Last name: <input type=\"text\" id=\"" + lNameID + "\" value=\"" + lName + "\"><br>\n"
         + "email: <input type=\"text\" id=\"" + emailID + "\" value=\"" + email + "\">\n"

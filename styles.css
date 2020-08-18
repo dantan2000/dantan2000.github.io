@@ -2,13 +2,16 @@
 .form-block {
     background-color: white;
     transition: all 0.1s ease;
-    line-height: 1.6;
 }
 
 .form-block:hover {
     background-color: #b9d2fb;
     box-shadow: 0px 0px 10px 10px #b9d2fb;
     transition: all 0.1s ease;
+}
+
+.form-text {
+    line-height: 1.6;
 }
 
 .form-element {
