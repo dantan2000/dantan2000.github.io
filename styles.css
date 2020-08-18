@@ -19,10 +19,11 @@
 }
 
 .remove-button {
-    top: 10px;
     background-color: white;
     border: 2px solid #fc2003;
     border-radius: 10px;
+    position: relative;
+    vertical-align: middle;
     transition: all 0.2s ease;
 }
 
@@ -30,6 +31,8 @@
     background-color: #fc2003;
     color: white;
     cursor: pointer;
+    position: relative;
+    vertical-align: middle;
 }
 
 .add-student-button {
