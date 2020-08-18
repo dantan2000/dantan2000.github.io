@@ -19,11 +19,11 @@
 }
 
 .remove-button {
+    top: 10px;
     background-color: white;
     border: 2px solid #fc2003;
     border-radius: 10px;
     transition: all 0.2s ease;
-    margin-top: 10px;
 }
 
 .remove-button:hover {
