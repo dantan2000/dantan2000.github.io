@@ -1,0 +1,51 @@
+
+.form-element {
+    display:inline-block;
+}
+
+.remove-button {
+    background-color: white;
+    border: 2px solid #fc2003;
+    position: relative;
+    top: -30px;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 30px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.remove-button:hover {
+    background-color: #fc2003;
+    color: white;
+    cursor: pointer;
+}
+
+.add-student-button {
+    background-color: white;
+    border: 2px solid #00295C;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    left: 250px;
+    transition: all 0.2s ease;
+}
+
+.add-student-button:hover {
+    background-color: #00295C;
+    color: white;
+}
+
+.submit-button {
+    background-color: white;
+    border: 2px solid #7cc09e;
+    border-radius: 10px;
+    text-align: center;
+    margin: auto;
+    transition: all 0.2s ease;
+}
+
+.submit-button:hover {
+    background-color: #7cc09e;
+    color: white;
+}
