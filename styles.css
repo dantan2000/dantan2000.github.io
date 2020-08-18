@@ -1,6 +1,20 @@
 
+.form-block {
+    background-color: white;
+    transition: all 0.1s ease;
+}
+
+.form-block:hover {
+    background-color: #b9d2fa;
+    box-shadow: 0px 0px 10px 10px #b9d2fa;
+    transition: all 0.1s ease;
+}
+
 .form-element {
-    display:inline-block;
+    display: inline-block;
+    line-height: 1.6;
+    margin-left: 10px;
+    margin-right: 30px;
 }
 
 .remove-button {
@@ -9,8 +23,6 @@
     position: relative;
     top: -30px;
     border-radius: 10px;
-    margin-left: 10px;
-    margin-right: 30px;
     text-align: center;
     transition: all 0.2s ease;
 }
