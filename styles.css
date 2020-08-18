@@ -21,7 +21,6 @@
 .remove-button {
     background-color: white;
     border: 2px solid #fc2003;
-    position: relative;
     border-radius: 10px;
     text-align: center;
     transition: all 0.2s ease;
