@@ -62,3 +62,11 @@
     background-color: #7cc09e;
     color: white;
 }
+
+.success {
+    color: #00295C;
+}
+
+.error {
+    color: #fc2003;
+}

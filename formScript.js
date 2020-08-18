@@ -14,11 +14,19 @@ class StudentForm {
     }
 }
 
-
+// Names for the IDs of the HTML Elements
 const formID = "form";
 const fNameID = "fname";
 const lNameID = "lname";
 const emailID = "email";
+
+// HTML String to be shown to the user if the form submission was successful
+const successString = "<div class=\"success\"><p>Your information was successfully submitted!"
+                            + " Feel free to add more students as necessary.</p></div>";
+
+// HTML String to be shown to the user if the form submission failed
+const errorString = "<div class=\"error\"><p>There was an error in submitting your data."
++ " Please try again.</p></div>";
 
 var numForms = 0;
 
@@ -33,7 +41,7 @@ var values = [
 ]
 var body = {
     value: values,
-    numForms: 2
+    numForms: 3
 }
 
 
@@ -162,16 +170,28 @@ $('#submit_forms').on('click', function(e) {
       dataType: "json",
       data: makeFormBody(),
       error: function (err) {
-        console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+          submitError(err);
       },
       success: function (suc) {
-          console.log("Success!!");
-          console.log("AJAX success in request: " + JSON.stringify(suc, null, 2));
-
+          if (suc.result == "success") {
+            submitSuccess(suc);
+          } else {
+            submitError(suc);
+          }
       }
     })
   });
 
-  function ctrlq(e) {
-      console.log(e.result);
+  function submitSuccess(suc) {
+    console.log("Success!!");
+    console.log("AJAX success in request: " + JSON.stringify(suc, null, 2));
+    document.getElementById("student_forms").innerHTML = "";
+    addForm();
+    document.getElementById("submit_message").innerHTML = successString;
+  }
+
+  function submitError(err) {
+    console.log("Success!!");
+    console.log("AJAX success in request: " + JSON.stringify(err, null, 2));
+    document.getElementById("submit_message").innerHTML = errorString;
   }
