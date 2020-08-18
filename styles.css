@@ -24,13 +24,13 @@
     border-radius: 10px;
     transition: all 0.2s ease;
     vertical-align: middle;
+    top: 10px;
 }
 
 .remove-button:hover {
     background-color: #fc2003;
     color: white;
     cursor: pointer;
-    top: 20px;
 }
 
 .add-student-button {
