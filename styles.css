@@ -5,8 +5,8 @@
 }
 
 .form-block:hover {
-    background-color: #b9d2fa;
-    box-shadow: 0px 0px 10px 10px #b9d2fa;
+    background-color: #b9d2fb;
+    box-shadow: 0px 0px 10px 10px #b9d2fb;
     transition: all 0.1s ease;
 }
 
