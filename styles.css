@@ -22,7 +22,7 @@
     background-color: white;
     border: 2px solid #fc2003;
     border-radius: 10px;
-    text-align: center;
+    top: 20px;
     transition: all 0.2s ease;
 }
 
@@ -30,6 +30,7 @@
     background-color: #fc2003;
     color: white;
     cursor: pointer;
+    top: 20px;
 }
 
 .add-student-button {
