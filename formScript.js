@@ -186,6 +186,7 @@ $('#submit_forms').on('click', function(e) {
     console.log("Success!!");
     console.log("AJAX success in request: " + JSON.stringify(suc, null, 2));
     document.getElementById("student_forms").innerHTML = "";
+    numForms = 0;
     addForm();
     document.getElementById("submit_message").innerHTML = successString;
   }
