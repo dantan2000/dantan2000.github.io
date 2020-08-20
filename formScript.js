@@ -77,6 +77,7 @@ const fNameID = "fname";
 const lNameID = "lname";
 const emailID = "email";
 const blockID = "block";
+const invalidID = "invalid";
 
 // Helper function to make HTML Strings for the user
 function makeHTMLString(HTMLClass, message) {
@@ -89,11 +90,11 @@ const successString = makeHTMLString("success", "Your information was successful
 // HTML String to be shown to the user if the form submission failed
 const errorString = makeHTMLString("error", "Sorry, there was an error in submitting your data. Please try again.");
 
-// HTML String to be shown if the user forget to fill out a form entry
-const emptyEntryString = makeHTMLString("invalid", "Please ensure all form fields are filled.");
+// String to be shown if the user forget to fill out a form entry
+const emptyEntryString = "Please ensure all form fields are filled.";
 
-// HTML String to be shown if the user puts in an invalid email address
-const invalidEmailString = makeHTMLString("invalid", "Please ensure the email address is valid.");
+// String to be shown if the user puts in an invalid email address
+const invalidEmailString = "Please ensure the email address is valid.";
 
 // Programmer enforced invariant: numForms = the number of forms on the page
 var numForms = 0;
@@ -132,6 +133,7 @@ function makeForm(index, fName = "", lName = "", email = "") {
         + "Last name: <input type=\"text\" id=\"" + lNameID + "\" value=\"" + lName + "\"><br>\n"
         + "email: <input type=\"text\" id=\"" + emailID + "\" value=\"" + email + "\">\n"
         + "</form></span>\n\n"
+        + "<div class=\"invalid\" id=\"" + invalidID + index + "\"></div>";
         + "</div><br>\n";
     console.log(formString);
     return formString;
@@ -230,7 +232,10 @@ function handleInvalidForms(invalidIDs) {
 // message: HTML string that will be appended to the blocks and shown to the user
 function displayInvalidMessage(invalidBlocks, message) {
     for (var i = 0; i < invalidBlocks.length; i++) {
-        var currentForm = document.getElementById(blockID + invalidBlocks[i]);
+        var currentForm = document.getElementById(invalidID + invalidBlocks[i]);
+        if (currentForm.innerHTML != "") {
+            currentForm.innerHTML += "<br>";
+        }
         currentForm.innerHTML += message;
     }
 }
