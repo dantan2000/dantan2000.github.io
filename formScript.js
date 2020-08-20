@@ -71,6 +71,9 @@ class InvalidIDs {
     }
 }
 
+// URL for the google script
+var scriptURL = "https://script.google.com/macros/s/AKfycbz3mCn0HWYzuYFkeMKqkpdZBcuHDIHSJnKh9Gf6IAbbF0NAEUY/exec";
+
 // Names for the IDs of the HTML Elements
 const formID = "form";
 const fNameID = "fname";
@@ -95,6 +98,9 @@ const emptyEntryString = "Please ensure all form fields are filled.";
 
 // String to be shown if the user puts in an invalid email address
 const invalidEmailString = "Please ensure the email address is valid.";
+
+// Speed of adding/removing form blocks in milliseconds
+const animationSpeed = 200;
 
 // Programmer enforced invariant: numForms = the number of forms on the page
 var numForms = 0;
@@ -124,7 +130,8 @@ addForm();
 // email: string -- the email to be filled into the form
 // Returns: string -- the HTML code that represents the created form
 function makeForm(index, fName = "", lName = "", email = "") {
-    var formString = "<div class=\"form-block\" id=\"block" + index + "\">\n"
+    var formString = "<div id=\"block" + index + "\">\n"
+        + "<div class=\"form-block\">"
         + "<span class=\"form-element\">\n"
         + "<br><h3><button class=\"remove-button\" onclick=\"removeForm(" + index + ")\">-</button></h3></span>\n"
         + "<span class=\"form-element\">\n"
@@ -134,6 +141,7 @@ function makeForm(index, fName = "", lName = "", email = "") {
         + "email: <input type=\"text\" id=\"" + emailID + "\" value=\"" + email + "\">\n"
         + "</form></span>\n"
         + "<div class=\"invalid\" id=\"" + invalidID + index + "\"></div>"
+        + "</div>"
         + "</div><br>\n\n";
     console.log(formString);
     return formString;
@@ -165,19 +173,32 @@ function addForm() {
     currentForms.push(new StudentForm());
     console.log("currentForms length at init: " + currentForms.length);
     showForms(currentForms);
+    animateAddForm(currentForms.length - 1);
     numForms++;
     console.log("numForms: " + numForms);
+}
+
+// Animates adding a new form
+function animateAddForm(index) {
+    var id = "#" + blockID + index;
+    $(id).hide(0, function() {
+        $(id).show(animationSpeed);
+    })
 }
 
 // Removes a form at the requested index
 function removeForm(index) {
     currentForms = readForms();
     if (index >= 0 && index < currentForms.length) {
-        currentForms.splice(index, 1);
-        showForms(currentForms);
-        numForms--;
+        var id = "#" + blockID  + index;
+        $(id).hide(animationSpeed, function() {
+            currentForms.splice(index, 1);
+            showForms(currentForms);
+            numForms--;
+        });
     }
 }
+
 
 // Reads the current forms on the page and returns the data as an array of StudentForms
 function readForms() {
@@ -288,7 +309,7 @@ $('#submit_forms').on('click', function (e) {
         // Send the request
         e.preventDefault();
         var jqxhr = $.ajax({
-            url: "https://script.google.com/macros/s/AKfycbz3mCn0HWYzuYFkeMKqkpdZBcuHDIHSJnKh9Gf6IAbbF0NAEUY/exec",
+            url: scriptURL,
             method: "GET",
             dataType: "json",
             data: makeFormBody(),
