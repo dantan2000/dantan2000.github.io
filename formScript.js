@@ -133,7 +133,7 @@ function makeForm(index, fName = "", lName = "", email = "") {
         + "Last name: <input type=\"text\" id=\"" + lNameID + "\" value=\"" + lName + "\"><br>\n"
         + "email: <input type=\"text\" id=\"" + emailID + "\" value=\"" + email + "\">\n"
         + "</form></span>\n\n"
-        //+ "<div class=\"invalid\" id=\"" + invalidID + index + "\"></div>";
+        + "<div class=\"invalid\" id=\"" + invalidID + index + "\"></div>";
         + "</div><br>\n";
     console.log(formString);
     return formString;
