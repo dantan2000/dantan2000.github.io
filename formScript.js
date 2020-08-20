@@ -1,4 +1,3 @@
-
 // Handles the form that the user sees
 class StudentForm {
     constructor(fName = "", lName = "", email = "") {
