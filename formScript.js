@@ -195,6 +195,9 @@ function removeForm(index) {
             currentForms.splice(index, 1);
             showForms(currentForms);
             numForms--;
+            if (numForms == 0) {
+                addForm();
+            }
         });
     }
 }
