@@ -390,7 +390,7 @@ $('#submit_forms').on('click', function (e) {
 // Shows the user a pending message
 function submitInProgress() {
     console.log("Subimtting data....");
-    document.getElementById("submit_message").innerHTML = loadingAnimationString;
+    document.getElementById("submit_message").innerHTML = pendingString + loadingAnimationString;
 }
 
 // Shows the user a success message and resets the form
