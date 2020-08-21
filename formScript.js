@@ -70,8 +70,21 @@ class InvalidIDs {
     }
 }
 
-// URL for the google script
-var scriptURL = "https://script.google.com/macros/s/AKfycbz3mCn0HWYzuYFkeMKqkpdZBcuHDIHSJnKh9Gf6IAbbF0NAEUY/exec";
+// URLs for the google script
+const oldScriptURL = "https://script.google.com/macros/s/AKfycbz3mCn0HWYzuYFkeMKqkpdZBcuHDIHSJnKh9Gf6IAbbF0NAEUY/exec";
+const adminURL = "https://script.google.com/a/changeissimple.org/macros/s/AKfycbwhISQQSWMujaZzu2klk1N19nc8Km3vjirLm3SotQ/exec";
+const doublePlatScriptURL = "https://script.google.com/macros/s/AKfycby0pMmtPu1gNNd4qHO1D8zeOWGHxBG2Cw8I0euu1rj3qnm3CSDp/exec";
+
+function getURL() {
+    switch (getPlan(currentMember)) {
+        case "Admin":
+        case "Double Platinum Teacher Test":
+            return doublePlatScriptURL;
+        default:
+            return oldScriptURL;
+    }
+}
+
 
 // Names for the IDs of the HTML Elements
 const formID = "form";
@@ -92,17 +105,39 @@ const successString = makeHTMLString("success", "Your information was successful
 // HTML String to be shown to the user if the form submission failed
 const errorString = makeHTMLString("error", "Sorry, there was an error in submitting your data. Please try again.");
 
+// HTML String to be shown to the user during the form submission
+const pendingString = makeHTMLString("success", "Submitting your form...");
+
+// HTML String for the loading animation
+// Source: loading.io
+const loadingAnimationString = "<div class=\"lds-roller\"><div></div><div></div><div></div><div>"
+    + "</div><div></div><div></div><div></div><div></div></div>";
+
 // String to be shown if the user forget to fill out a form entry
 const emptyEntryString = "Please ensure all form fields are filled.";
 
 // String to be shown if the user puts in an invalid email address
 const invalidEmailString = "Please ensure the email address is valid.";
 
+
 // Speed of adding/removing form blocks in milliseconds
 const animationSpeed = 200;
 
 // Programmer enforced invariant: numForms = the number of forms on the page
 var numForms = 0;
+
+// MemberSpace member object
+var currentMember
+
+// Initializes currentMember
+(function() {
+    MemberSpace.onReady = MemberSpace.onReady || [];
+    MemberSpace.onReady.push(function(args) {
+        if (args.member) {
+            currentMember = args.member;
+        }
+    });
+}());
 
 // Test values for appending to a sheet
 var values = [
@@ -116,6 +151,21 @@ var values = [
 var body = {
     value: values,
     numForms: 3
+}
+
+// Gets the plan of the current teacher
+// TODO: If multiple plans, get highest tier
+function getPlan(member) {
+    return member.plans[0];
+}
+
+
+// Gets the information of the teacher filling out the form
+function getUserValues() {
+    var userValues = [];
+    userValues.push(currentMember.firstName, currentMember.lastName, currentMember.email, getPlan(currentMember));
+    console.log("Current user values: " + userValues);
+    return userValues;
 }
 
 
@@ -279,7 +329,10 @@ function makeFormArray() {
     for (var i = 0; i < studentForms.length; i++) {
         var sf = studentForms[i];
         // console.log(sf);
-        formArray.push(sf.toArray());
+        var studentArray = sf.toArray();
+        var teacherArray = getUserValues();
+        var tempArray = studentArray.concat(teacherArray)
+        formArray.push(tempArray);
     }
     return formArray;
 }
@@ -304,6 +357,7 @@ function resetForms() {
 
 // Submits the form to the Google Script through an AJAX request
 $('#submit_forms').on('click', function (e) {
+    submitInProgress();
     resetForms();
     var studentForms = readForms();
     var invalidIDs = validateForms(studentForms);
@@ -311,7 +365,7 @@ $('#submit_forms').on('click', function (e) {
         // Send the request
         e.preventDefault();
         var jqxhr = $.ajax({
-            url: scriptURL,
+            url: getURL(),
             method: "GET",
             dataType: "json",
             data: makeFormBody(),
@@ -329,9 +383,17 @@ $('#submit_forms').on('click', function (e) {
     } else {
         // Handle invalid entries
         handleInvalidForms(invalidIDs);
+        document.getElementById("submit_message").innerHTML = "";
     }
 });
 
+// Shows the user a pending message
+function submitInProgress() {
+    console.log("Subimtting data....");
+    document.getElementById("submit_message").innerHTML = loadingAnimationString;
+}
+
+// Shows the user a success message and resets the form
 function submitSuccess(suc) {
     console.log("Success!!");
     console.log("AJAX success in request: " + JSON.stringify(suc, null, 2));
@@ -341,6 +403,7 @@ function submitSuccess(suc) {
     document.getElementById("submit_message").innerHTML = successString;
 }
 
+// Shows the user an error message and maintains the form
 function submitError(err) {
     console.log("Error");
     console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
