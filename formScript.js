@@ -78,6 +78,7 @@ const doublePlatScriptURL = "https://script.google.com/macros/s/AKfycby0pMmtPu1g
 function getURL() {
     switch (getPlan(currentMember)) {
         case "Admin":
+            return adminURL;
         case "Double Platinum Teacher Test":
             return doublePlatScriptURL;
         default:
