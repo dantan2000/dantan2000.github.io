@@ -12,22 +12,32 @@
     </script>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
 </head>
 <body>
 
 <h>Student Forms:</h> <br> <br>
 
-<div id="student_forms"></div>
+<div id="add-student-forms"></div>
 
-<h2><button class="add-student-button" onclick="addForm()">Add Student</button> </h2> <br> <br> <br>
-<h3><button class="submit-button" id="submit_forms">Submit</button></h3>
-<div id="submit_message"></div>
 
 <button onclick="validateFormsTester()">Validate Forms</button>
+<button onclick="getTiers()">Get Tiers</button>
+<button onclick="getPlanTester()">Get Plan Tester</button>
 
+
+<iframe width="100%" height="3000"></iframe>
 
 <script src="formScript.js"></script>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="sidebarStyles.css">
+
+<script src="sidebar.js"></script>
 
 </body>
 </html>

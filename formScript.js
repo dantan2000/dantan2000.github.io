@@ -71,29 +71,24 @@ class InvalidIDs {
 }
 
 // URLs for the google script
-const oldScriptURL = "https://script.google.com/macros/s/AKfycbz3mCn0HWYzuYFkeMKqkpdZBcuHDIHSJnKh9Gf6IAbbF0NAEUY/exec";
-const adminURL = "https://script.google.com/a/changeissimple.org/macros/s/AKfycbwhISQQSWMujaZzu2klk1N19nc8Km3vjirLm3SotQ/exec";
-const doublePlatScriptURL = "https://script.google.com/macros/s/AKfycby0pMmtPu1gNNd4qHO1D8zeOWGHxBG2Cw8I0euu1rj3qnm3CSDp/exec";
-
-function getURL() {
-    switch (getPlan(currentMember)) {
-        case "Admin":
-            return adminURL;
-        case "Double Platinum Teacher Test":
-            return doublePlatScriptURL;
-        default:
-            return oldScriptURL;
-    }
-}
+const scriptURL = "https://script.google.com/a/changeissimple.org/macros/s/AKfycbwhISQQSWMujaZzu2klk1N19nc8Km3vjirLm3SotQ/exec";
+const tiersURL = "https://script.google.com/macros/s/AKfycbzt0byNi_oIceYma3OEP0CHJHMaTWKYEVbfhUt_6_AJL_mdG-yq/exec"
 
 
 // Names for the IDs of the HTML Elements
+const mainDivID = "add-student-forms"; // Represents the ID of the div the form will be placed into
 const formID = "form";
 const fNameID = "fname";
 const lNameID = "lname";
 const emailID = "email";
 const blockID = "block";
 const invalidID = "invalid";
+
+// HTML string that initializes the form (creates the required div's and buttons)
+const setupHTML = "<div id=\"student_forms\"></div>"
+    + "<h2><button class=\"add-student-button\" onclick=\"addForm()\">Add Student</button> </h2> <br> <br> <br>"
+    + "<h3><button class=\"submit-button\" id=\"submit_forms\" onclick=\"submitForm()\">Submit</button></h3>"
+    + "<div id=\"submit_message\"></div>";
 
 // Helper function to make HTML Strings for the user
 function makeHTMLString(HTMLClass, message) {
@@ -108,6 +103,9 @@ const errorString = makeHTMLString("error", "Sorry, there was an error in submit
 
 // HTML String to be shown to the user during the form submission
 const pendingString = makeHTMLString("success", "Submitting your form...");
+
+// HTML String to be shown to the user if the script is unable to get the tier data from the server
+const tierFailureString = makeHTMLString("error", "Error: Unable to load form. Please refresh the page and try again later.");
 
 // HTML String for the loading animation
 // Source: loading.io
@@ -130,35 +128,61 @@ var numForms = 0;
 // MemberSpace member object
 var currentMember
 
+// List of tiers from the spreadsheet
+var tiers;
+
 // Initializes currentMember
-(function() {
+(function () {
     MemberSpace.onReady = MemberSpace.onReady || [];
-    MemberSpace.onReady.push(function(args) {
+    MemberSpace.onReady.push(function (args) {
         if (args.member) {
             currentMember = args.member;
         }
     });
 }());
 
-// Test values for appending to a sheet
-var values = [
-    [
-        "john", "doe", "johndoe@gmail.com"
-    ],
-    [
-        "jane", "deer", "janedeer@gmail.com"
-    ]
-]
-var body = {
-    value: values,
-    numForms: 3
+
+// Gets the current tiers for the platform
+async function getTiers(_callback) {
+    await $.ajax({
+        url: tiersURL,
+        method: "GET",
+        dataType: "json",
+        data: {},
+        error: function (err) {
+            throw err;
+        },
+        success: function (suc) {
+            if (suc.result == "success") {
+                console.log("Got tiers from server: " + suc.tiers)
+                tiers = suc.tiers;
+            } else {
+                submitError(suc);
+            }
+        }
+    })
+    _callback();
 }
+
 
 // Gets the plan of the current teacher
 // TODO: If multiple plans, get highest tier
 function getPlan(member) {
-    return member.plans[0];
+    if (tiers) {
+        // Finds the first (and top priority) tier the member has
+        for (var i = 0; i < tiers.length; i++) {
+            if (member.plans.includes(tiers[i])) {
+                return tiers[i];
+            }
+        }
+        // Member tier does not exist in spreadsheet
+        throw "Invalid member tier";
+    } else {
+        getTiers();
+        throw "tiers haven't been recieved from server";
+    }
 }
+
 
 
 // Gets the information of the teacher filling out the form
@@ -170,8 +194,42 @@ function getUserValues() {
 }
 
 
-// Initializes form
-addForm();
+// Initializes form and tiers
+initForm();
+
+// Calls getTiers to get the list of tiers from the server and passes a callback to set up the form once the tiers have been made
+async function initForm() {
+    document.getElementById(mainDivID).innerHTML = loadingAnimationString;
+    var maxFail = 5;
+    var failureCounter = 0;
+    while (!tiers) {
+        try {
+            await getTiers(initFormCallback);
+        } catch (err) {
+            // Increase the fail counter, if the request failed too many times, show an error
+            failureCounter++;
+            if (failureCounter >= maxFail) {
+                handleTierRequestFailure();
+                return;
+            }
+        }
+    }
+}
+
+// Callback for initForm after the tiers have been created
+function initFormCallback() {
+    createHTML();
+    addForm();
+}
+
+// Creates the HTML that sets up the form, creating divs and buttons
+function createHTML() {
+    document.getElementById(mainDivID).innerHTML = setupHTML;
+}
+
+function handleTierRequestFailure() {
+    document.getElementById(mainDivID).innerHTML = tierFailureString;
+}
 
 // Makes a single HTML form to be shown to the user
 // index: integer -- the index of the form to be created
@@ -231,7 +289,7 @@ function addForm() {
 // Animates adding a new form
 function animateAddForm(index) {
     var id = "#" + blockID + index;
-    $(id).hide(0, function() {
+    $(id).hide(0, function () {
         $(id).show(animationSpeed);
     })
 }
@@ -240,8 +298,8 @@ function animateAddForm(index) {
 function removeForm(index) {
     currentForms = readForms();
     if (index >= 0 && index < currentForms.length) {
-        var id = "#" + blockID  + index;
-        $(id).hide(animationSpeed, function() {
+        var id = "#" + blockID + index;
+        $(id).hide(animationSpeed, function () {
             currentForms.splice(index, 1);
             showForms(currentForms);
             numForms--;
@@ -318,7 +376,7 @@ function displayInvalidMessage(invalidBlocks, message) {
 function focusForm(index) {
     var formBlock = document.getElementById(blockID + index);
     formBlock.focus();
-    formBlock.scrollIntoView({behavior: "smooth", block: "center"});
+    formBlock.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 // Reads the current form and constructs a 2D array of all the entries to be sent to the server
@@ -344,7 +402,8 @@ function makeFormBody() {
     var formArray = makeFormArray()
     var formBody = {
         value: formArray,
-        numForms: formArray.length
+        numForms: formArray.length,
+        tier: getPlan(currentMember)
     }
     console.log("form body: " + JSON.stringify(formBody));
     return formBody;
@@ -357,36 +416,41 @@ function resetForms() {
 }
 
 // Submits the form to the Google Script through an AJAX request
-$('#submit_forms').on('click', function (e) {
+//$('#submit_forms').on('click', function (e) {
+function submitForm() {
     submitInProgress();
     resetForms();
     var studentForms = readForms();
     var invalidIDs = validateForms(studentForms);
-    if (invalidIDs.isEmpty()) {
-        // Send the request
-        e.preventDefault();
-        var jqxhr = $.ajax({
-            url: getURL(),
-            method: "GET",
-            dataType: "json",
-            data: makeFormBody(),
-            error: function (err) {
-                submitError(err);
-            },
-            success: function (suc) {
-                if (suc.result == "success") {
-                    submitSuccess(suc);
-                } else {
-                    submitError(suc);
+    try {
+        if (invalidIDs.isEmpty()) {
+            // Send the request
+            //e.preventDefault();
+            var jqxhr = $.ajax({
+                url: scriptURL,
+                method: "GET",
+                dataType: "json",
+                data: makeFormBody(),
+                error: function (err) {
+                    throw err;
+                },
+                success: function (suc) {
+                    if (suc.result == "success") {
+                        submitSuccess(suc);
+                    } else {
+                        throw err;
+                    }
                 }
-            }
-        })
-    } else {
-        // Handle invalid entries
-        handleInvalidForms(invalidIDs);
-        document.getElementById("submit_message").innerHTML = "";
+            })
+        } else {
+            // Handle invalid entries
+            handleInvalidForms(invalidIDs);
+            document.getElementById("submit_message").innerHTML = "";
+        }
+    } catch (err) {
+        submitError(err);
     }
-});
+};
 
 // Shows the user a pending message
 function submitInProgress() {
