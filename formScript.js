@@ -178,7 +178,7 @@ function getPlan(member) {
         // Member tier does not exist in spreadsheet
         throw "Invalid member tier";
     } else {
-        getTiers();
+        getTiers(function () {return});
         throw "tiers haven't been recieved from server";
     }
 }
