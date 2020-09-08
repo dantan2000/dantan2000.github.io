@@ -10,6 +10,7 @@
     font-family: Crushed;
     font-size: 18px;
     color: #4d4d4d;
+    text-decoration: underline;
     padding: 10px;
     transition: all .1s ease;
 }
