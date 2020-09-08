@@ -1,44 +1,58 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <script>
-    var MemberSpace = window.MemberSpace || {subdomain: "localhost3000"};
-    (function(d){
+    var MemberSpace = window.MemberSpace || { subdomain: "localhost3000" };
+    (function (d) {
       var s = d.createElement("script");
       s.src = "https://cdn.memberspace.com/scripts/widgets.js";
       var e = d.getElementsByTagName("script")[0];
-      e.parentNode.insertBefore(s,e);
+      e.parentNode.insertBefore(s, e);
     }(document));
-    </script>
+  </script>
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script src="util.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="util.js"></script>
 
-    <style>
-      body {
-        margin: 0;
-      }
-    </style>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+
+  <link rel="stylesheet" href="squarespaceCSS.css">
+  <link rel="stylesheet" href="headerStyles.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Crushed" />
 </head>
+
 <body>
 
-<h>Student Forms:</h> <br> <br>
+  <main id="page" role="main">  
+    
+    <div id="header-nav"><div class="lds-facebook"><div></div><div></div><div></div></div></div>
 
-<div id="add-student-forms"></div>
+    <h>Student Forms:</h> <br> <br>
+    <div id="add-student-forms"></div>
+  
+  
+    <button onclick="validateFormsTester()">Validate Forms</button>
+    <button onclick="getTiers()">Get Tiers</button>
+    <button onclick="getPlanTester()">Get Plan Tester</button>
+  
+    <iframe src="https://drive.google.com/file/d/1aBQ_cqM4g9hTeHgY_jSXhCKrcelOC-Zp/preview" width="640" height="480"></iframe>
+
+    <iframe width="100%" height="3000"></iframe>
+  
 
 
-<button onclick="validateFormsTester()">Validate Forms</button>
-<button onclick="getTiers()">Get Tiers</button>
-<button onclick="getPlanTester()">Get Plan Tester</button>
+    </main>
 
-
-<iframe width="100%" height="3000"></iframe>
-
-<script src="formScript.js"></script>
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="sidebarStyles.css">
-
-<script src="sidebar.js"></script>
-
+  
+  <script src="formScript.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="sidebarStyles.css">
+  <script src="header.js"></script>
 </body>
+
 </html>
