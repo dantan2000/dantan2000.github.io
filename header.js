@@ -13,7 +13,7 @@ var adminLinks = {
 var currentMember;
 
 const headerName = "header-nav";
-const linksURL = "https://script.google.com/macros/s/AKfycbwnk-6kX4mKFAcHI3IibLC5KUUSSdUSM45SRGM67ezqyYi1WWis/exec";
+const linksURL = "https://script.google.com/a/changeissimple.org/macros/s/AKfycbwX3XEcLOQA5XTD0HW6zbZTNArrxr4NAZwp2YBgHMCF6rx-2qM/exec";
 const loadingHTML = "<div class=\"lds-facebook\"><div></div><div></div><div></div></div>";
 
 // Initializes currentMember and sidebar

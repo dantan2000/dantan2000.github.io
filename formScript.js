@@ -71,7 +71,7 @@ class InvalidIDs {
 }
 
 // URLs for the google script
-const scriptURL = "https://script.google.com/a/changeissimple.org/macros/s/AKfycbwhISQQSWMujaZzu2klk1N19nc8Km3vjirLm3SotQ/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxnh3Zf1o6CdHFwB2cdADW30rpFM5HZAbL613T4xXp4hqcMoA0/exec";
 const tiersURL = "https://script.google.com/macros/s/AKfycbzt0byNi_oIceYma3OEP0CHJHMaTWKYEVbfhUt_6_AJL_mdG-yq/exec"
 
 
