@@ -1,0 +1,14 @@
+{
+   "name": "student-forms",
+   "version": "0.0.1",
+   "description": "demo project.",
+   "scripts": {
+      "lite": "lite-server --port 10001",
+      "start": "npm run lite"
+   },
+   "author": "",
+   "license": "ISC",
+   "dependencies": {
+      "lite-server": "^2.5.4"
+   }
+}
