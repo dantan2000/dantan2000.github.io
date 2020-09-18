@@ -1,3 +1,7 @@
+/*
+MAKE CHANGES
+*/
+
 // Temporary links object for local testing
 var adminLinks = {
     "Forum": "forum",
